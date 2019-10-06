@@ -26,6 +26,12 @@ server.add_handler '_rd' do |value_to_matched|
             values.push(Numeric)
         elsif t['regexp'] ==  '^[-+/*]$'
             values.push(%r{^[-+/*]$})
+        elsif t['from'] == (1..10)
+            values.push(1..10)
+        elsif t['from'] == ('a'..'z')
+            values.push('a'..'z')
+        elsif t['symbol'] == 'chopstick'
+            values.push(Chopstick)
         else
             values.push(t)
         end
@@ -44,6 +50,12 @@ server.add_handler '_in' do |value_to_deleted|
             values.push(Numeric)
         elsif t['regexp'] ==  '^[-+/*]$'
             values.push(%r{^[-+/*]$})
+        elsif t['from'] == (1..10)
+            values.push(1..10)
+        elsif t['from'] == ('a'..'z')
+            values.push('a'..'z')
+        elsif t['symbol'] == 'chopstick'
+            values.push(Chopstick)
         else
             values.push(t)
         end
@@ -63,6 +75,12 @@ server.add_handler 'test' do |value_to_deleted|
             values.push(Numeric)
         elsif t['regexp'] ==  '^[-+/*]$'
             values.push(%r{^[-+/*]$})
+        elsif t['from'] == (1..10)
+            values.push(1..10)
+        elsif t['from'] == ('a'..'z')
+            values.push('a'..'z')
+        elsif t['symbol'] == 'chopstick'
+            values.push(Chopstick)
         else
             values.push(t)
         end

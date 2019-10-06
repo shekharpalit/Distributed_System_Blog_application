@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import xmlrpc.client
 import time
-proxy = xmlrpc.client.ServerProxy("http://localhost:8000/",allow_none=True)
+proxy = xmlrpc.client.ServerProxy("http://localhost:8000/", allow_none=True)
 
 #proxy._in()
 
