@@ -8,7 +8,7 @@ DRb.start_service
 
 
 
-server.add_handler '_in' do |array_values|
+server.add_handler '_out' do |array_values|
     array_values.each do |t|
       ts.write(t)
     end
@@ -19,7 +19,7 @@ end
 
 server.add_handler '_rd' do |value_to_matched|
     values = []
-    Array(value_to_deleted).each do |t|
+    Array(value_to_matched).each do |t|
         if t['class'] == "String"
             values.push(String)
         elsif t['class'] == 'Numeric'
@@ -30,12 +30,12 @@ server.add_handler '_rd' do |value_to_matched|
             values.push(t)
         end
     end
-    res = ts.read(values)
-    String(res)
+    # String(values)
+    res = ts.read_all(values)
 end
 
 
-server.add_handler '_out' do |value_to_deleted|
+server.add_handler '_in' do |value_to_deleted|
     values = []
     Array(value_to_deleted).each do |t|
         if t['class'] == "String"
@@ -50,6 +50,27 @@ server.add_handler '_out' do |value_to_deleted|
     end
     res = ts.take(values)
     String(res)
+end
+
+
+server.add_handler 'test' do |value_to_deleted|
+    values = []
+    result_tuple = []
+    Array(value_to_deleted).each do |t|
+        if t['class'] == "String"
+            values.push(String)
+        elsif t['class'] == 'Numeric'
+            values.push(Numeric)
+        elsif t['regexp'] ==  '^[-+/*]$'
+            values.push(%r{^[-+/*]$})
+        else
+            values.push(t)
+        end
+    end
+    result_tuple = ts.read_all(values)
+    value_current = ts.take(result_tuple[0])
+    result_tuple = []
+    String(value_current)
 end
 
 server.serve
