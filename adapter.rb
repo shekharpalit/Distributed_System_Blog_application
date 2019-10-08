@@ -2,7 +2,7 @@
 require 'rinda/rinda'
 require 'xmlrpc/server'
 
-server = XMLRPC::Server.new(8002)
+server = XMLRPC::Server.new(8003)
 ts = Rinda::TupleSpaceProxy.new(DRbObject.new(nil, "druby://localhost:61676"))
 DRb.start_service
 
@@ -26,9 +26,9 @@ server.add_handler '_rd' do |value_to_matched|
             values.push(Numeric)
         elsif t['regexp'] ==  '^[-+/*]$'
             values.push(%r{^[-+/*]$})
-        elsif t['from'] == (1..10)
+        elsif t['from'] ==  "1, 'to': 10"
             values.push(1..10)
-        elsif t['from'] == ('a'..'z')
+        elsif t['from'] == "'a', 'to': 'z'"
             values.push('a'..'z')
         elsif t['symbol'] == 'chopstick'
             values.push(Chopstick)
@@ -50,9 +50,9 @@ server.add_handler '_in' do |value_to_deleted|
             values.push(Numeric)
         elsif t['regexp'] ==  '^[-+/*]$'
             values.push(%r{^[-+/*]$})
-        elsif t['from'] == (1..10)
+        elsif t['from'] == "1, 'to': 10"
             values.push(1..10)
-        elsif t['from'] == ('a'..'z')
+        elsif t['from'] == "'a', 'to': 'z'"
             values.push('a'..'z')
         elsif t['symbol'] == 'chopstick'
             values.push(Chopstick)
@@ -65,7 +65,7 @@ server.add_handler '_in' do |value_to_deleted|
 end
 
 
-server.add_handler 'test' do |value_to_deleted|
+server.add_handler '_read_next' do |value_to_deleted|
     values = []
     result_tuple = []
     Array(value_to_deleted).each do |t|
@@ -75,9 +75,9 @@ server.add_handler 'test' do |value_to_deleted|
             values.push(Numeric)
         elsif t['regexp'] ==  '^[-+/*]$'
             values.push(%r{^[-+/*]$})
-        elsif t['from'] == (1..10)
+        elsif t['from'] == "1, 'to': 10"
             values.push(1..10)
-        elsif t['from'] == ('a'..'z')
+        elsif t['from'] == "'a', 'to': 'z'"
             values.push('a'..'z')
         elsif t['symbol'] == 'chopstick'
             values.push(Chopstick)
