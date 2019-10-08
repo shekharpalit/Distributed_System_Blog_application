@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 require 'rinda/rinda'
-require 'xmlrpc/server'
+require 'xmlrpc/server'  #import depedences
 
-server = XMLRPC::Server.new(8003)
-ts = Rinda::TupleSpaceProxy.new(DRbObject.new(nil, "druby://localhost:61676"))
+server = XMLRPC::Server.new(8003) #create a XML RPC server
+XMLRPC::Config::ENABLE_NIL_PARSER = true #allow true for Null values
+ts = Rinda::TupleSpaceProxy.new(DRbObject.new(nil, "druby://localhost:61676")) #connet with the Rinda tuple space
 DRb.start_service
 
 
-
-server.add_handler '_out' do |array_values|
+#This handler will take input as a list of lists from the client application
+server.add_handler '_out' do |array_values| #handler for adding elements into the tuplespace
     array_values.each do |t|
       ts.write(t)
     end
@@ -16,9 +17,9 @@ server.add_handler '_out' do |array_values|
     String(message)
 end
 
-
-server.add_handler '_rd' do |value_to_matched|
-    values = []
+#This handler will take input as a list from the client application
+server.add_handler '_rd' do |value_to_matched| #handler for read elements from the tuplespace
+    values = []  #this will create the input for the tuple space from the input list 
     Array(value_to_matched).each do |t|
         if t['class'] == "String"
             values.push(String)
@@ -36,13 +37,13 @@ server.add_handler '_rd' do |value_to_matched|
             values.push(t)
         end
     end
-    # String(values)
-    res = ts.read_all(values)
+    result = ts.read(values)
+    String(result)
 end
 
-
-server.add_handler '_in' do |value_to_deleted|
-    values = []
+#This handler will take input as a list from the client application
+server.add_handler '_in' do |value_to_deleted| #handler for take/delete elements from the tuplespace
+    values = []  #this will create the input for the tuple space from the input list
     Array(value_to_deleted).each do |t|
         if t['class'] == "String"
             values.push(String)
@@ -60,14 +61,14 @@ server.add_handler '_in' do |value_to_deleted|
             values.push(t)
         end
     end
-    res = ts.take(values)
-    String(res)
+    result = ts.take(values)
+    String(result)
 end
 
-
-server.add_handler '_read_next' do |value_to_deleted|
-    values = []
-    result_tuple = []
+#This handler will take input as a list from the client application
+server.add_handler '_read_next' do |value_to_deleted| #handler for read the next elements from the tuplespace
+    values = []  #this will create the input for the tuple space from the input list
+    result_tuple = [] #hold all the tuplespce results
     Array(value_to_deleted).each do |t|
         if t['class'] == "String"
             values.push(String)
