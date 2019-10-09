@@ -19,7 +19,7 @@ end
 
 #This handler will take input as a list from the client application
 server.add_handler '_rd' do |value_to_matched| #handler for read elements from the tuplespace
-    values = []  #this will create the input for the tuple space from the input list 
+    values = []  #this will create the input for the tuple space from the input list
     Array(value_to_matched).each do |t|
         if t['class'] == "String"
             values.push(String)
@@ -38,7 +38,7 @@ server.add_handler '_rd' do |value_to_matched| #handler for read elements from t
         end
     end
     result = ts.read(values)
-    String(result)
+    Array(result)
 end
 
 #This handler will take input as a list from the client application
@@ -62,7 +62,7 @@ server.add_handler '_in' do |value_to_deleted| #handler for take/delete elements
         end
     end
     result = ts.take(values)
-    String(result)
+    Array(result)
 end
 
 #This handler will take input as a list from the client application
@@ -89,7 +89,33 @@ server.add_handler '_read_next' do |value_to_deleted| #handler for read the next
     result_tuple = ts.read_all(values)
     value_current = ts.take(result_tuple[0])
     result_tuple = []
-    String(value_current)
+    Array(value_current)
 end
+
+#This handler will take input as a list from the client application and returns all matching tuple values
+server.add_handler '_rd_all' do|value_to_read|
+  values = []  #this will create the input for the tuple space from the input list
+  result_tuple = [] #hold all the tuplespce results
+  Array(value_to_read).each do |t|
+      if t['class'] == "String"
+          values.push(String)
+      elsif t['class'] == 'Numeric'
+          values.push(Numeric)
+      elsif t['regexp'] ==  '^[-+/*]$'
+          values.push(%r{^[-+/*]$})
+      elsif t['from'] == "1, 'to': 10"
+          values.push(1..10)
+      elsif t['from'] == "'a', 'to': 'z'"
+          values.push('a'..'z')
+      elsif t['symbol'] == 'chopstick'
+          values.push(Chopstick)
+      else
+          values.push(t)
+      end
+  end
+  result = ts.read_all(values)
+  Array(result)
+end
+
 
 server.serve
