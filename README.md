@@ -16,6 +16,40 @@ There are 2 nodes in the network, one act as client (written in python) and one 
 
 - Fortunately Ruby, another common scripting language, includes a module named Rinda which implements the Linda distributed computing paradigm.
 
+## How to run the project:
+ Install the dependencies by the following command 
+ 
+ ```
+ $ gem install --user-install xmlrpc
+ 
+ ```
+ Start the Rinda TupleSpace 
+ 
+ ```
+ ruby tuplespace.rb
+ 
+ ```
+
+ Start the adapter.rb file 
+ 
+ ```
+ ruby adapter.rb
+ 
+ ```
+
+ if you're running the blog application in a single file, then run 
+ 
+ ```
+ python blog.py
+ 
+ ```
+ if you're running the arithmetic operations
+ 
+ ```
+ 1. python arithmetic_client.py
+ 2. python arithmetic_server.py
+ ```
+ 
 # The Project Team
 ## Team Members
 - Shekhar Palit
